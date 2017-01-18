@@ -23,31 +23,36 @@ public class TestBIgInteger {
         arr[0] = 0;
 
         Random random = new Random();
-        for (int i = 1; i < cnt; i += 1) {
+        for (int  k = 0; k < 3 ; k ++) {
+            for (int i = 1; i < cnt; i += 1) {
 
-            IntStream intStream1 = random.ints(0, 10);
-            IntStream intStream2 = random.ints(0, 10);
-            String a = intStream1.limit(i).map(num ->  (char) num ).collect(StringBuilder::new,
-                    (sb, num) -> sb.append(num),
-                    StringBuilder::append
-                    ).toString();
-            String b = intStream2.limit(i).map(num ->  (char) num ).collect(StringBuilder::new,
-                    (sb, num) -> sb.append(num),
-                    StringBuilder::append
-            ).toString();
+                IntStream intStream1 = random.ints(0, 10);
+                IntStream intStream2 = random.ints(0, 10);
+                String a = intStream1.limit(i).map(num -> (char) num).collect(StringBuilder::new,
+                        (sb, num) -> sb.append(num),
+                        StringBuilder::append
+                ).toString();
+                String b = intStream2.limit(i).map(num -> (char) num).collect(StringBuilder::new,
+                        (sb, num) -> sb.append(num),
+                        StringBuilder::append
+                ).toString();
 //            System.out.println(a);
 //            System.out.println(b);
 
-            BigInteger aa = new BigInteger(a);
-            BigInteger bb = new BigInteger(b);
+                BigInteger aa = new BigInteger(a);
+                BigInteger bb = new BigInteger(b);
 
-            long start = System.nanoTime();
-            BigInteger c = aa.multiply(bb);
-            long end = System.nanoTime();
-            arr[i] = end - start;
-            System.out.println(i + " : " + (end - start));
+                long start = System.nanoTime();
+                BigInteger c = aa.multiply(bb);
+                long end = System.nanoTime();
+                arr[i] += (end - start);
+
+                System.out.println(k + " " + i);
+            }
         }
-
+        for (int i = 1; i < cnt; i += 1) {
+            arr[i] = Math.round(((double)arr[i])/3.);
+        }
 
         final XYSeries series = new XYSeries("Random Data");
         for (int i = 0 ; i < cnt ; i ++) {
@@ -91,7 +96,7 @@ public class TestBIgInteger {
         long max = Integer.MIN_VALUE;
         long sum = 0;
         long cnt = 0;
-        for (int i = Math.max(0, pos - 3); i < Math.min(size, pos + 3); i ++) {
+        for (int i = Math.max(0, pos - 15); i < Math.min(size, pos + 15); i ++) {
             cnt ++;
             sum += arr[i];
             min = arr[i] < min ? arr[i] : min;
