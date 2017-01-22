@@ -13,7 +13,10 @@ import java.util.stream.IntStream;
  * Created by artvl on 17.01.17.
  */
 public class TestBIgInteger {
-    static int cnt = 20000;
+    static int cnt = 5000;
+    static int tries = 10;
+    static int avg = 10;
+
 
     public static void main(String[] args) {
 
@@ -23,7 +26,7 @@ public class TestBIgInteger {
         arr[0] = 0;
 
         Random random = new Random();
-        for (int  k = 0; k < 3 ; k ++) {
+        for (int  k = 0; k < tries ; k ++) {
             for (int i = 1; i < cnt; i += 1) {
 
                 IntStream intStream1 = random.ints(0, 10);
@@ -47,11 +50,11 @@ public class TestBIgInteger {
                 long end = System.nanoTime();
                 arr[i] += (end - start);
 
-                System.out.println(k + " " + i);
+//                System.out.println(k + " " + i);
             }
         }
         for (int i = 1; i < cnt; i += 1) {
-            arr[i] = Math.round(((double)arr[i])/3.);
+            arr[i] = Math.round(((double)arr[i])/(double) tries);
         }
 
         final XYSeries series = new XYSeries("Random Data");
@@ -96,7 +99,7 @@ public class TestBIgInteger {
         long max = Integer.MIN_VALUE;
         long sum = 0;
         long cnt = 0;
-        for (int i = Math.max(0, pos - 15); i < Math.min(size, pos + 15); i ++) {
+        for (int i = Math.max(0, pos - avg); i < Math.min(size, pos + avg); i ++) {
             cnt ++;
             sum += arr[i];
             min = arr[i] < min ? arr[i] : min;
