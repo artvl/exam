@@ -4,6 +4,7 @@ import iterableRange.Pair;
 import iterableRange.Queue;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 
 /**
@@ -129,7 +130,7 @@ public class QSort {
         for (int j = 1; j < array.length; j++) {
             Object key = array[j];
             int i = j - 1;
-            while (i > 0 && cmp.compare(key, array[i]) < 0) {
+            while (i >= 0 && cmp.compare(key, array[i]) < 0) {
                 array[i + 1] = array[i];
                 i--;
             }

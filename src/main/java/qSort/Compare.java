@@ -1,10 +1,7 @@
 package qSort;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
