@@ -17,7 +17,8 @@ public class QSort {
         array[j] = tmp;
     }
 
-    private static int chooseMiddle(int l, int r, int mid, Object[] array, Comparator cmp) {
+    private static CustomFunction chooseMedian = (int l, int r, Object[] array, Comparator cmp) -> {
+        int mid = l + (r - l) / 2;
         Object left = array[l];
         Object right = array[r];
         Object middle = array[mid];
@@ -38,14 +39,15 @@ public class QSort {
                 return l;
             }
         }
-    }
+    };
 
-    private static int partition(Object[] array, int begin, int end, Comparator cmp) {
+    private static CustomFunction chooseMiddle = (int l, int r, Object[] array, Comparator cmp) -> (l + (r - l) / 2);
+
+    private static int partition(Object[] array, int begin, int end, Comparator cmp, CustomFunction median) {
 
         int i = begin - 1;
         int j = end + 1;
-        int middle = (begin + end) / 2;
-        int index = chooseMiddle(begin, end, middle, array, cmp);
+        int index = median.apply(begin, end, array, cmp);
         Object pivot = array[index];
         while (true) {
 
@@ -63,36 +65,42 @@ public class QSort {
 
             swap(array, i, j);
         }
-
         return j;
     }
 
-    private static void qsort(Object[] array, int begin, int end, Comparator cmp) {
+    private static void qsort(Object[] array, int begin, int end, Comparator cmp, CustomFunction median, final boolean removeBranch) {
         if (end > begin) {
-            int index = partition(array, begin, end, cmp);
-            Queue<Pair<Integer, Integer>> queue = new Queue<>();
-            if (index > (begin + end) / 2) {
-                qsort(array, index + 1, end, cmp);
-                queue.enqueue(Pair.of(begin, index));
-            } else {
-                qsort(array, begin, index, cmp);
-                queue.enqueue(Pair.of(index + 1, end));
-            }
+            int index = partition(array, begin, end, cmp, median);
 
-            //Bigger part w/o recursion
-            while (!queue.isEmpty()) {
-                Pair<Integer, Integer> current = queue.dequeue();
-                int ind = partition(array, current.getKey(), current.getValue(), cmp);
-                if (current.getKey() < ind) {
-                    queue.enqueue(Pair.of(current.getKey(), ind));
+            if (removeBranch) {
+                Queue<Pair<Integer, Integer>> queue = new Queue<>();
+                if (index > (begin + end) / 2) {
+                    qsort(array, index + 1, end, cmp, median, removeBranch);
+                    queue.enqueue(Pair.of(begin, index));
+                } else {
+                    qsort(array, begin, index, cmp, median, removeBranch);
+                    queue.enqueue(Pair.of(index + 1, end));
                 }
-                if (current.getValue() > ind + 1) {
-                    queue.enqueue(Pair.of(ind + 1, current.getValue()));
+
+                //Bigger part w/o recursion
+                while (!queue.isEmpty()) {
+                    Pair<Integer, Integer> current = queue.dequeue();
+                    int ind = partition(array, current.getKey(), current.getValue(), cmp, median);
+                    if (current.getKey() < ind) {
+                        queue.enqueue(Pair.of(current.getKey(), ind));
+                    }
+                    if (current.getValue() > ind + 1) {
+                        queue.enqueue(Pair.of(ind + 1, current.getValue()));
+                    }
                 }
+            } else {
+                qsort(array, begin, index, cmp, median, removeBranch);
+                qsort(array, index + 1, end, cmp, median, removeBranch);
             }
 
 
         }
+
     }
 
     public static void sort(Object[] array, Comparator cmp) {
@@ -100,7 +108,18 @@ public class QSort {
             return;
         }
         if (array.length > 2) {
-            qsort(array, 0, array.length - 1, cmp);
+            qsort(array, 0, array.length - 1, cmp, chooseMiddle, false);
+        } else {
+            insertionSort(array, cmp);
+        }
+    }
+
+    public static void sort(Object[] array, Comparator cmp, boolean median, boolean removeBranch) {
+        if (array.length < 2) {
+            return;
+        }
+        if (array.length > 47) {
+            qsort(array, 0, array.length - 1, cmp, median ? chooseMedian : chooseMiddle, removeBranch);
         } else {
             insertionSort(array, cmp);
         }

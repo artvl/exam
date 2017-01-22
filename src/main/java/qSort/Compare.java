@@ -19,8 +19,8 @@ public class Compare {
             Random random = new Random();
 
 
-            Integer a[] = {63, 100, 247, 337, 848};
-            Integer b[] = {63, 247, 100, 848, 337};
+            Integer a[] = {};
+            Integer b[] = {};
             ArrayList<Integer> arr = random.ints(0, 1000).limit(size)
                     .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
             a = arr.toArray(a);
@@ -37,7 +37,7 @@ public class Compare {
             QSort.sort(b, (Object o1, Object o2) -> {
                 cnt[1]++;
                 return Integer.compare((Integer) o1, (Integer) o2);
-            });
+            }, true, false);
             System.out.println(cnt[0] + " " + cnt[1]);
 
             for (int i = 0; i < size; i++) {
