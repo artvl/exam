@@ -13,6 +13,8 @@ public class Ktree {
     ArrayList<Point> points;
     XVertex root;
 
+    public List<Vertex> vertexList = new ArrayList<>();
+
     public Ktree(ArrayList<Point> points) {
         this.points = points;
         root = new XVertex();
@@ -70,6 +72,7 @@ public class Ktree {
             current.setPoint(points.get(0));
             return current;
         }
+        vertexList.add(current);
 
         Point middle = Utils.findOrderStatistics(points, (points.size()) / 2, current.getComparator());
 

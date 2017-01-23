@@ -9,18 +9,9 @@ import java.util.Random;
 public class Test {
     public static void main(String[] args) {
 
-//        A.B a= new A.B();
-//
-//        A.C adf = new A().new C();
-//
-//        TreeMap<String, Integer> aff = new TreeMap<>();
-//
-//        aff.keySet();
-//
-//        //PriorityQueue <String> a = new PriorityQueue<>();
-
-
+        int r  = 0, w = 0;
         while (true) {
+            r++;
             ArrayList<Point> a = new ArrayList<>();
 
             Random k = new Random();
@@ -32,10 +23,11 @@ public class Test {
 
             Point pointToFind = new Point(k.nextDouble() * 100, k.nextDouble() * 100);
 
+            System.out.println(a);
             System.out.println("find : " + pointToFind);
 
-            Ktree temp = new Ktree(a);
 
+            Ktree temp = new Ktree(a);
             temp.build();
 
             double l1 = temp.findPoint(pointToFind);
@@ -47,11 +39,11 @@ public class Test {
                 Ktree help = new Ktree(a);
                 help.build();
 
-                System.out.println(a);
                 System.out.println(temp.findPoint(pointToFind));
                 System.out.println(help.findPoint(pointToFind));
                 //return;
-                int i = 0;
+                w++;
+                System.out.println("\n\n " + r + " " + w + "\n\n");
             }
         }
     }

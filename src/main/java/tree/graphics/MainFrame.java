@@ -1,9 +1,14 @@
-package algojava;
+package tree.graphics;
+
+import tree.*;
+import tree.Point;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Random;
 
 
 // AWT Abstract Window Toolkit
@@ -16,7 +21,7 @@ public class MainFrame extends JFrame {
     private Timer timer;
 
     private void onStartClick() {
-        view.SetRandom(10);
+//        view.SetRandom(10);
         timer.start();
     }
 
@@ -30,24 +35,26 @@ public class MainFrame extends JFrame {
         JButton button = new JButton();
         button.setText("Start");
 
-//        JButton button2 = new JButton();
-//        button2.setText("X");
-//
-//        JButton button3 = new JButton();
-//        button3.setText("Long button text");
 
         JPanel top = new JPanel();
         top.setSize(100, 40);
         top.add(button);
-//        top.add(button2);
-//        top.add(button3);
+
+        ArrayList<Point> a = new ArrayList<>();
+        Random k = new Random();
+
+        for (int i = 0; i < 10; i++) {
+            a.add(new tree.Point(k.nextDouble() , k.nextDouble() ));
+        }
+        Ktree temp = new Ktree(a);
+        temp.build();
 
         add(top, BorderLayout.NORTH);
 
-        view = new ViewPanel();
+        view = new ViewPanel( temp.vertexList, a);
         add(view);
 
-        timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 view.next();
