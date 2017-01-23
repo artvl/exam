@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
         ArrayList<Point> a = new ArrayList<>();
         Random k = new Random();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 30; i++) {
             a.add(new tree.Point(k.nextDouble(), k.nextDouble()));
         }
         Ktree temp = new Ktree(a);

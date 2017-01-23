@@ -124,14 +124,16 @@ public class Ktree {
     }
 
     private double lengthPointToRect(Point p, Rectangle rect) {
-        double lenght = p.getLength(rect.getLeftDown());
+        double length = p.getLength(rect.getLeftDown());
+        if (rect.isInside(p)) {
+            return 0.;
+        }
+        length = Math.min(length, lengthPointToTwo(p, rect.getLeftDown(), rect.getLeftUp()));
+        length = Math.min(length, lengthPointToTwo(p, rect.getLeftUp(), rect.getRightUp()));
+        length = Math.min(length, lengthPointToTwo(p, rect.getRightUp(), rect.getRightDown()));
+        length = Math.min(length, lengthPointToTwo(p, rect.getRightDown(), rect.getLeftDown()));
 
-        lenght = Math.min(lenght, lengthPointToTwo(p, rect.getLeftDown(), rect.getLeftUp()));
-        lenght = Math.min(lenght, lengthPointToTwo(p, rect.getLeftUp(), rect.getRightUp()));
-        lenght = Math.min(lenght, lengthPointToTwo(p, rect.getRightUp(), rect.getRightDown()));
-        lenght = Math.min(lenght, lengthPointToTwo(p, rect.getLeftDown(), rect.getLeftDown()));
-
-        return lenght;
+        return length;
     }
 
     private double lengthPointToTwo(Point a, Point b, Point c) {

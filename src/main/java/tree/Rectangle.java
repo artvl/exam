@@ -11,16 +11,15 @@ public class Rectangle {
     Point rightDown;
 
     @Override
-    public String toString ()
-    {
-        String string = "{ " +leftDown + " , "
+    public String toString() {
+        String string = "{ " + leftDown + " , "
                 + leftUp + " , "
                 + rightUp + " , "
                 + rightDown + " }";
         return string;
     }
-    Rectangle()
-    {
+
+    Rectangle() {
         leftDown = new Point();
         leftUp = new Point();
         rightUp = new Point();
@@ -59,8 +58,7 @@ public class Rectangle {
         this.leftDown = leftDown;
     }
 
-    Rectangle(Point ld, Point lu, Point ru, Point rd)
-    {
+    Rectangle(Point ld, Point lu, Point ru, Point rd) {
         leftDown = ld;
         leftUp = lu;
         rightUp = ru;
@@ -68,6 +66,12 @@ public class Rectangle {
     }
 
 
-
+    public boolean isInside(Point p) {
+        if (p.getX() > leftDown.getX() && p.getX() < rightUp.getX()
+                && p.getY() > leftDown.getY() && p.getY() < rightUp.getY()) {
+            return true;
+        }
+        return false;
+    }
 
 }

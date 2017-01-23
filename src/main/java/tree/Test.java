@@ -16,7 +16,7 @@ public class Test {
 
             Random k = new Random();
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 20; i++) {
                 a.add(new Point(k.nextDouble() * 100, k.nextDouble() * 100));
             }
 
