@@ -84,41 +84,43 @@ public class Ktree {
     }
 
 
-    public double findPoint(Point point) {
+    public Point findPoint(Point point) {
         return findPoint(root, point);
     }
 
-    private double findPoint(Vertex vertex, Point p) {
+    private Point findPoint(Vertex vertex, Point from) {
         if (vertex.isLeaf()) {
-
-            System.out.println("Tree closest point : " + vertex.getPoint());
-
-            return vertex.getPoint().getLength(p);
+//            System.out.println("Tree closest point : " + vertex.getPoint());
+            return vertex.getPoint();
         }
-        if (vertex.compareToBorder(p)) {
-            double len = findPoint(vertex.getLeft(), p);
-            len = Math.min(len, calc(vertex.getRight(), p, len));
-            return len;
+        if (vertex.compareToBorder(from)) {
+            Point candidate = findPoint(vertex.getLeft(), from);
+            candidate = from.getClosestPoint(candidate, calc(vertex.getRight(), from, candidate));
+            return candidate;
         } else {
-            double len = findPoint(vertex.getRight(), p);
-            len = Math.min(len, calc(vertex.getLeft(), p, len));
-            return len;
+            Point candidate = findPoint(vertex.getRight(), from);
+            candidate = from.getClosestPoint(candidate, calc(vertex.getLeft(), from, candidate));
+            return candidate;
         }
     }
 
 
-    private double calc(Vertex ver, Point p, double length) {
+    private Point calc(Vertex ver, Point from, Point candidate) {
 
         if (ver.isLeaf()) {
-            return p.getLength(ver.getPoint());
+            if (ver.getPoint().getLength(from)  > candidate.getLength(from)) {
+                return candidate;
+            } else {
+                return ver.getPoint();
+            }
         }
 
-        if (lengthPointToRect(p, ver.getRect()) > length) {
-            return length;
+        if (lengthPointToRect(from, ver.getRect()) > from.getLength(candidate)) {
+            return candidate;
         }
 
-        return Math.min(calc(ver.getLeft(), p, length), calc(ver.getRight(), p, length));
-
+        return from.getClosestPoint(calc(ver.getLeft(), from, candidate), calc(ver.getRight(), from, candidate));
+//        return Math.min(calc(ver.getLeft(), from, candidate), calc(ver.getRight(), from, candidate));
     }
 
     private double lengthPointToRect(Point p, Rectangle rect) {

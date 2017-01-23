@@ -1,5 +1,7 @@
 package tree;
 
+import org.omg.PortableServer.POA;
+
 public class Point {
     double x;
     double y;
@@ -47,5 +49,13 @@ public class Point {
         double length = 0.;
         length += (Math.pow((x - b.x), 2) + Math.pow((y - b.y), 2));
         return length;
+    }
+
+    public Point getClosestPoint(Point a, Point b) {
+        if (this.getSquaredLength(a) > this.getSquaredLength(b)) {
+            return b;
+        } else {
+            return a;
+        }
     }
 }

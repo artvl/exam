@@ -21,7 +21,6 @@ public class MainFrame extends JFrame {
     private Timer timer;
 
     private void onStartClick() {
-//        view.SetRandom(10);
         timer.start();
     }
 
@@ -37,49 +36,36 @@ public class MainFrame extends JFrame {
 
 
         JPanel top = new JPanel();
-        top.setSize(100, 40);
+        top.setSize(100, 20);
         top.add(button);
 
         ArrayList<Point> a = new ArrayList<>();
         Random k = new Random();
 
         for (int i = 0; i < 10; i++) {
-            a.add(new tree.Point(k.nextDouble() , k.nextDouble() ));
+            a.add(new tree.Point(k.nextDouble(), k.nextDouble()));
         }
         Ktree temp = new Ktree(a);
         temp.build();
 
+        Point pointToFind = new Point(k.nextDouble(), k.nextDouble());
+        Point find = temp.findPoint(pointToFind);
+
         add(top, BorderLayout.NORTH);
 
-        view = new ViewPanel( temp.vertexList, a);
+        view = new ViewPanel(temp.vertexList, a, pointToFind, find);
         add(view);
 
-        timer = new Timer(2000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                view.next();
-            }
-        });
+        timer = new Timer(1000, e -> view.next());
 
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //JOptionPane.showMessageDialog(null, "Hello, world!");
-                onStartClick();
-            }
-        });
+        button.addActionListener(e ->
+                onStartClick()
+        );
     }
 
     public static void main(String[] args) {
         MainFrame frame = new MainFrame();
         frame.setVisible(true);
 
-        //EventQueue.invokeLater(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        MainFrame frame = new MainFrame();
-        //        frame.setVisible(true);
-        //    }
-        //});
     }
 }

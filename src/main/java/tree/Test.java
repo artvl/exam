@@ -30,12 +30,12 @@ public class Test {
             Ktree temp = new Ktree(a);
             temp.build();
 
-            double l1 = temp.findPoint(pointToFind);
-            double l2 = findClosest(pointToFind, a);
+            Point l1 = temp.findPoint(pointToFind);
+            Point l2 = findClosest(pointToFind, a);
             System.out.println("Tree : " + l1);
             System.out.println("all points : " + l2);
 
-            if (Math.abs(l1 - l2) > 0.01) {
+            if (l1.getLength(l2) > 0.01) {
                 Ktree help = new Ktree(a);
                 help.build();
 
@@ -48,9 +48,9 @@ public class Test {
         }
     }
 
-    static double findClosest(Point p, ArrayList<Point> list) {
+    static Point findClosest(Point p, ArrayList<Point> list) {
         if (list.size() == 0) {
-            return 0.;
+            return null;
         }
         int j = 0;
         double len = p.getLength(list.get(0));
@@ -63,7 +63,7 @@ public class Test {
         }
         System.out.println("Real closest point : " + list.get(j));
 
-        return len;
+        return list.get(j);
     }
 
 }

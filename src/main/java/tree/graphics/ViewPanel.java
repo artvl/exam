@@ -7,19 +7,21 @@ import javax.swing.*;
 import java.awt.*;
 
 import java.awt.Rectangle;
-import java.util.Random;
 import java.util.List;
 
 public class ViewPanel extends JPanel {
 
-    ViewPanel(List<Vertex> list , List<Point> points) {
+    ViewPanel(List<Vertex> list , List<Point> points, Point find, Point closest) {
         this.vl = list;
         this.points = points.toArray(this.points);
+        this.find = find;
+        this.closest = closest;
     }
 
     String format = "(%1.2f;%1.2f)";
 
-
+    Point find;
+    Point closest;
 
 
 
@@ -53,45 +55,48 @@ public class ViewPanel extends JPanel {
 
         if (points != null && vl != null) {
             for (int i = 0; i < points.length; i++) {
-                int x = Math.round((rect.width - 2 * MARGIN_X) * ((float)points[i].getX() - minX) / (maxX - minX));
-                int y = Math.round((rect.height - 2 * MARGIN_Y) * ((float)points[i].getY() - minY) / (maxY - minY));
-                g.setColor(Color.BLACK);
-                g.fillOval(x - 3, y - 3, 7, 7);
-                g.drawString(String.format(format, points[i].getX(), points[i].getY()), x, y);
+                drawPointWithColor(Color.BLACK, points[i], g);
             }
             for (int j = 0; j < Math.min(step,vl.size()); j ++) {
                 if (j % 2 == 0) {
-                    double lx = vl.get(j).getRect().getLeftDown().getX();
-                    double ly = vl.get(j).getRect().getLeftDown().getY();
-                    double rx = vl.get(j).getRect().getRightUp().getX();
-                    double ry = vl.get(j).getRect().getRightUp().getY();
-                    int lxLine = Math.round((rect.width - 2 * MARGIN_X) * ((float)lx - minX) / (maxX - minX));
-                    int lyLine = Math.round((rect.height - 2 * MARGIN_Y) * ((float)ly - minY) / (maxY - minY));
-                    int rxLine = Math.round((rect.width - 2 * MARGIN_X) * ((float)rx - minX) / (maxX - minX));
-                    int ryLine = Math.round((rect.height - 2 * MARGIN_Y) * ((float)ry - minY) / (maxY - minY));
-
-                    g.setColor(Color.RED);
-                    g.drawLine(lxLine, lyLine, lxLine, ryLine);
-                    g.drawLine(rxLine, lyLine, rxLine, ryLine);
-                    g.drawLine(lxLine, lyLine, rxLine, lyLine);
-                    g.drawLine(lxLine, ryLine, rxLine, ryLine);
+                    drawRectWithColor(Color.RED, vl.get(j), g);
                 } else {
-                    double lx = vl.get(j).getRect().getLeftDown().getX();
-                    double ly = vl.get(j).getRect().getLeftDown().getY();
-                    double rx = vl.get(j).getRect().getRightUp().getX();
-                    double ry = vl.get(j).getRect().getRightUp().getY();
-                    int lxLine = Math.round((rect.width - 2 * MARGIN_X) * ((float)lx - minX) / (maxX - minX));
-                    int lyLine = Math.round((rect.height - 2 * MARGIN_Y) * ((float)ly - minY) / (maxY - minY));
-                    int rxLine = Math.round((rect.width - 2 * MARGIN_X) * ((float)rx - minX) / (maxX - minX));
-                    int ryLine = Math.round((rect.height - 2 * MARGIN_Y) * ((float)ry - minY) / (maxY - minY));
-
-                    g.setColor(Color.GREEN);
-                    g.drawLine(lxLine, lyLine, lxLine, ryLine);
-                    g.drawLine(rxLine, lyLine, rxLine, ryLine);
-                    g.drawLine(lxLine, lyLine, rxLine, lyLine);
-                    g.drawLine(lxLine, ryLine, rxLine, ryLine);
+                    drawRectWithColor(Color.GREEN, vl.get(j), g);
                 }
             }
+            if (step >= vl.size() + 1) {
+                drawPointWithColor(Color.YELLOW, find, g);
+            }
+            if (step >= vl.size() + 2) {
+                drawPointWithColor(Color.BLUE, closest, g);
+            }
         }
+    }
+
+    private void drawRectWithColor(Color color, Vertex vx, Graphics g) {
+        Rectangle rect = getBounds();
+        double lx = vx.getRect().getLeftDown().getX();
+        double ly = vx.getRect().getLeftDown().getY();
+        double rx = vx.getRect().getRightUp().getX();
+        double ry = vx.getRect().getRightUp().getY();
+        int lxLine = Math.round((rect.width - 2 * MARGIN_X) * ((float)lx - minX) / (maxX - minX));
+        int lyLine = Math.round((rect.height - 2 * MARGIN_Y) * ((float)ly - minY) / (maxY - minY));
+        int rxLine = Math.round((rect.width - 2 * MARGIN_X) * ((float)rx - minX) / (maxX - minX));
+        int ryLine = Math.round((rect.height - 2 * MARGIN_Y) * ((float)ry - minY) / (maxY - minY));
+
+        g.setColor(color);
+        g.drawLine(lxLine, lyLine, lxLine, ryLine);
+        g.drawLine(rxLine, lyLine, rxLine, ryLine);
+        g.drawLine(lxLine, lyLine, rxLine, lyLine);
+        g.drawLine(lxLine, ryLine, rxLine, ryLine);
+    }
+
+    private void drawPointWithColor(Color color, Point point, Graphics g) {
+        Rectangle rect = getBounds();
+        int x = Math.round((rect.width - 2 * MARGIN_X) * ((float)point.getX() - minX) / (maxX - minX));
+        int y = Math.round((rect.height - 2 * MARGIN_Y) * ((float)point.getY() - minY) / (maxY - minY));
+        g.setColor(color);
+        g.fillOval(x - 3, y - 3, 7, 7);
+        g.drawString(String.format(format, point.getX(), point.getY()), x, y);
     }
 }
